@@ -1,4 +1,6 @@
 #include "draw.h"
+#include "constant.h"
+#include "mazesolver.h"
 #include <iostream>
 #ifdef _WIN32 
     #include <conio.h>  

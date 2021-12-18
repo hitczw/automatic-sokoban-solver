@@ -1,6 +1,8 @@
 #include "game_solver.h"
+#include "constant.h"
+#include "locked.h"
+#include "repeat.h"
 #include <deque>
-#include <string>
 #include <iostream>
 #include <time.h>
 

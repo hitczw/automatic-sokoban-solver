@@ -1,4 +1,6 @@
 #include "repeat.h"
+#include "constant.h"
+
 using namespace constant;
 using namespace std;
 

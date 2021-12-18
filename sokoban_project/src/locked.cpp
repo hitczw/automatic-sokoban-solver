@@ -1,5 +1,7 @@
 #include "locked.h"
-using namespace constant;	
+#include "constant.h"
+#include <cmath>
+using namespace constant;
 using namespace std;
 
 bool locked::locked_double(vector<vector<char>>& matrix_with_box, point& box, point& wall) {

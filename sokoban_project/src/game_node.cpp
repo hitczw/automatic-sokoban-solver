@@ -1,4 +1,7 @@
 #include "game_node.h"
+#include "mazesolver.h"
+#include "constant.h"
+
 using namespace constant;
 using namespace std;
 

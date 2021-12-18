@@ -1,4 +1,5 @@
 #include "mazesolver.h"
+#include "constant.h"
 #include <deque>
 #include <set>
 using namespace constant;

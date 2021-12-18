@@ -1,7 +1,5 @@
-
 #include "constant.h"
 using namespace std;
-
 
 char constant::m;
 char constant::n;
