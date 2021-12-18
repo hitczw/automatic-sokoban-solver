@@ -1,7 +1,8 @@
 #pragma once
 
-#include"constant.h"
+#include "point.h"
 #include <memory>
+#include <vector>
 
 class npoint {
 public:

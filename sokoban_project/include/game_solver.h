@@ -1,7 +1,6 @@
 #pragma once
 
-#include "repeat.h"
-#include "locked.h"
+#include "game_node.h"
 #include <string>
 
 //后续改进:对终点顺序调整局面估值,可以通过拉箱子的方法确定最后推动的先后顺序

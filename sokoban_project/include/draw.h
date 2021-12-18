@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_node.h"
+
 class draw_picture {
 private:
 	void draw_pic(std::vector<std::vector<char>>& matrix);

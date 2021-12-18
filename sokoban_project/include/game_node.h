@@ -1,6 +1,7 @@
 #pragma once
 
-#include "mazesolver.h"
+#include "point.h"
+#include <vector>
 #include <set>
 
 class game_node {
