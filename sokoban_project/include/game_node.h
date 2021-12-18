@@ -29,4 +29,3 @@ public:
 	void get_moved(const point& box_before, point& box_new,game_node* result);
 };
 
-
