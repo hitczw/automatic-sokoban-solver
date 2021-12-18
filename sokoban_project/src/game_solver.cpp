@@ -26,7 +26,7 @@ void detect_legal::get_value(const vector<vector<char>>& maze_matrix, point& per
 			new_point = direction + temp_point;
 			if (is_inside(new_point)) {//如果点在边境内
 				if (value[new_point.x][new_point.y] == false) {//如果这个点没有走过
-					if (maze_matrix[new_point.x][new_point.y] == 1) {//如果这个点是通道												
+					if (maze_matrix[new_point.x][new_point.y] == BLANK) {//如果这个点是通道												
 						value[new_point.x][new_point.y] = true;//这个点可以到达
 						for_loop.push_front(new_point);//这个点不是终点,同样记录并压栈,并开始下一次遍历
 					}
@@ -65,7 +65,7 @@ bool detect_legal::can_box_move(point& box, point& person) {
 	//初始化完成后,仅需常数时间进行判断
 	point new_point;
 	new_point = box * 2 - person;
-	return matrix_with_box[new_point.x][new_point.y] == 1;//仅当这个点是通道时候可以推动
+	return matrix_with_box[new_point.x][new_point.y] == BLANK;//仅当这个点是通道时候可以推动
 }
 
 
@@ -122,34 +122,34 @@ game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn) {
 			temp_p = { x,y };
 			switch (temp_c) {
 			case '#':
-				blank_matrix[x][y] = 0;
+				blank_matrix[x][y] = WALL;
 				break;
 			case ' ':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				break;
 			case '$':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				box_point_start.insert(temp_p);
 				break;
 			case '*':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				box_point_start.insert(temp_p);
-				end_vec[x][y] = 1;
+				end_vec[x][y] = true;
 				break;
 			case '.':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				//end_list.insert(temp_p);
-				end_vec[x][y] = 1;
+				end_vec[x][y] = true;
 				break;
 			case '@':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				person_start = temp_p;
 				break;
 			case '+':
-				blank_matrix[x][y] = 1;
+				blank_matrix[x][y] = BLANK;
 				person_start = temp_p;
 				//end_list.insert(temp_p);
-				end_vec[x][y] = 1;
+				end_vec[x][y] = true;
 				break;
 			default:
 				break;
@@ -229,7 +229,7 @@ vector<point> game_solver::get_legal_point(vector<vector<char>>& vec, point p) {
 	for (auto i = 0; i < 4; i++) {
 		auto pp = p + four_direction[i];
 		//遍历4个点
-		if (vec[pp.x][pp.y] == 1) {
+		if (vec[pp.x][pp.y] == BLANK) {
 			//如果当前点是通道
 			for (auto& dect : detect) {
 				//遍历检查
@@ -262,7 +262,7 @@ vector<vector<int>> game_solver::Astar_init() {
 	
 	for (int i = 0; i <m; i++) {
 		for (int j = 0; j < n; j++) {
-			if (blank_matrix[i][j] == 0) {
+			if (blank_matrix[i][j] == WALL) {
 				result[i][j] = 1000;
 				continue;
 			}
@@ -277,9 +277,6 @@ vector<vector<int>> game_solver::Astar_init() {
 			if (person_point.empty()) {
 				result[i][j] = 1000;
 				continue;
-			}
-			if(i==4 && j==0){
-				int b=3;
 			}
 			int min_num=INT32_MAX;
 			for (auto& dd : person_point){
@@ -366,7 +363,6 @@ vector<game_node> game_solver::Astar_solver() {
 
 						else {
 							//产生新节点,且不在closed中
-
 							temp_box2->get_f(vec);//计算f的值
 							open.insert(temp_box2);//插入并重新排序
 							for_del.push_back(temp_box2);

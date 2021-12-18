@@ -52,7 +52,8 @@ int main() {
 	cin.get();
 	draw_picture d;
 	d.draw(ss);
-
+	
+	
 #ifdef _WIN32
 		system("pause");
 #endif

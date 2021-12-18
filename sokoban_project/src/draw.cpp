@@ -9,8 +9,6 @@
 using namespace constant;
 using namespace std;
 
-const char draw_picture::symbols[8]={'#',' ','$','o','*','@','?','+'};
-//{ "WALL","BLANK","BOX","FINAL", "REDBOX","PERSON" ,"NULL","PERSONF" };
 void draw_picture::draw_pic(vector<vector<char>>& matrix) {
 #ifdef _WIN32
 	system("cls");
@@ -40,7 +38,7 @@ point draw_picture::get_end(game_node& first, game_node& second) {
 	return second.person_point * 2 - p;
 }
 
-void draw_picture::get_complete(vector<game_node>& input) {
+vector<game_node> draw_picture::get_complete(const vector<game_node>& input) {
 	vector<game_node> output;
 	output.push_back(input[0]);
 	maze_solver maze;
@@ -56,14 +54,24 @@ void draw_picture::get_complete(vector<game_node>& input) {
 		}
 	}
 
-	input = output;
+	return output;
 }
 
-draw_picture::draw_picture() {}
+draw_picture::draw_picture() {
+	//const char draw_picture::symbols[7]={'#','o',' ','$','*','@','+'};
+	////{WALL=0, FINAL, BLANK, BOX, REDBOX, PERSON, PERSONF};
+	symbols[WALL] = WALL_CHAR;
+	symbols[FINAL] = FINAL_CHAR;
+	symbols[BLANK] = BLANK_CHAR;
+	symbols[BOX] = BOX_CHAR;
+	symbols[REDBOX] = REDBOX_CHAR;
+	symbols[PERSON] = PERSON_CHAR;
+	symbols[PERSONF] = PERSONF_CHAR;
+}
 
-void draw_picture::draw(vector<game_node>& ss) {
+void draw_picture::draw(vector<game_node>& sss) {
 
-	get_complete(ss);
+	auto ss = get_complete(sss);
 	int i = ss.size() - 1;
 	auto matrix = ss[i].get_matrix2();
 	draw_pic(matrix);

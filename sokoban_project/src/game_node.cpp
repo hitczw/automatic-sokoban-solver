@@ -15,7 +15,7 @@ game_node::game_node(){
 void game_node::get_matrix0(vector<vector<char>>& result)const {//加上箱子
 	result = blank_matrix;
 	for (auto item = box_list.begin(); item != box_list.end(); item++) {
-		result[(*item).x][(*item).y] = 2;
+		result[(*item).x][(*item).y] = BOX;
 	}
 }
 
@@ -23,7 +23,7 @@ vector<vector<char>> game_node::get_matrix()const {//加上箱子
 	auto result = blank_matrix;
 
 	for (auto item = box_list.begin(); item != box_list.end(); item++) {
-		result[(*item).x][(*item).y] = 2;
+		result[(*item).x][(*item).y] = BOX;
 	}
 	return result;
 }
@@ -32,17 +32,22 @@ vector<vector<char>> game_node::get_matrix2()const {
 	vector<vector<char>> result;
 	result = blank_matrix;
 
-	for (auto item_box = box_list.begin();item_box != box_list.end();item_box++) {
-		result[(*item_box).x][(*item_box).y] += 1;//箱子+1
-	}
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
 			if (end_vec[i][j] == true) {
-				result[i][j] += 2;
+				result[i][j] = FINAL;
 			}
 		}
 	}
-	result[person_point.x][person_point.y] += 4;//人+4
+	for (auto item_box = box_list.begin();item_box != box_list.end();item_box++) {
+		end_vec[(*item_box).x][(*item_box).y]?
+		 result[(*item_box).x][(*item_box).y] = REDBOX:
+		 result[(*item_box).x][(*item_box).y] = BOX;
+	}
+	
+	end_vec[person_point.x][person_point.y]?
+	 result[person_point.x][person_point.y]=PERSONF:
+	 result[person_point.x][person_point.y]=PERSON;
 	return result;
 }
 

@@ -25,15 +25,6 @@ bool Apoint::operator<(const Apoint& b)const {
 bool maze_solver::bfs_maze_solver(const vector<vector<char>> &maze_matrix, const point &end, const point& person_point) {
 	//广度优先法解决迷宫,返回迷宫是否有解
 	//仅当终点为通道时候有解
-	if (maze_matrix[end.x][end.y] != 1) {//如果终点不是通道
-		return false;
-	}
-	else if (maze_matrix[person_point.x][person_point.y] != 1) {//如果起点不是通道
-		return false;
-	}
-	else if (person_point == end) {
-		return true;
-	}
 
 	auto zero_matrix = matrix0;
 	deque<point> for_loop;
@@ -49,7 +40,7 @@ bool maze_solver::bfs_maze_solver(const vector<vector<char>> &maze_matrix, const
 			new_point = direction + temp_point;
 			if (is_inside(new_point)) {//如果点在边境内
 				if (zero_matrix[new_point.x][new_point.y] == false) {//如果这个点没有走过
-					if (maze_matrix[new_point.x][new_point.y] == 1) {//如果这个点是通道
+					if (maze_matrix[new_point.x][new_point.y] == BLANK) {//如果这个点是通道
 						if (new_point == end) {//如果这个点是终点
 							return true;
 						}
@@ -68,15 +59,6 @@ bool maze_solver::bfs_maze_solver(const vector<vector<char>> &maze_matrix, const
 
 bool maze_solver::dfs_maze_solver(const vector<vector<char>> &maze_matrix, const point &end, const point& person_point) {
 	//深度优先,回溯法
-	if (maze_matrix[end.x][end.y] != 1) {//如果终点不是通道
-		return false;
-	}
-	else if (maze_matrix[person_point.x][person_point.y] != 1) {//如果起点不是通道
-		return false;
-	}
-	else if (person_point == end) {
-		return true;
-	}
 
 	auto zero_matrix = matrix0;
 	vector<point> for_loop;
@@ -93,7 +75,7 @@ bool maze_solver::dfs_maze_solver(const vector<vector<char>> &maze_matrix, const
 			new_point = direction + temp_point;
 			if (is_inside(new_point)) {//如果点在边境内
 				if (zero_matrix[new_point.x][new_point.y] == false) {//如果这个点没有走过
-					if (maze_matrix[new_point.x][new_point.y] == 1) {//如果这个点是通道
+					if (maze_matrix[new_point.x][new_point.y] == BLANK) {//如果这个点是通道
 						if (new_point == end) {//如果这个点是终点
 							//cout << "???" << endl;
 							return true;
@@ -124,15 +106,6 @@ bool maze_solver::Astar(const vector<vector<char>> &maze_matrix, const point &en
 	//A*算法解迷宫
 	//此算法对大地图效率体现有效
 	//小地图不明显
-	if (maze_matrix[end.x][end.y] != 1) {//如果终点不是通道
-		return false;
-	}
-	else if (maze_matrix[person_point.x][person_point.y] != 1) {//如果起点不是通道
-		return false;
-	}
-	else if (person_point == end) {
-		return true;
-	}
 
 	//算法第0步
 	multiset<Apoint> open;
@@ -165,7 +138,7 @@ bool maze_solver::Astar(const vector<vector<char>> &maze_matrix, const point &en
 
 			if (is_inside(new_point.p)) {//如果点在边境内
 				if (closed[new_point.p.x][new_point.p.y] == false) {//如果这个点没在closed表中
-					if (maze_matrix[new_point.p.x][new_point.p.y] == 1) {//如果这个点是通道
+					if (maze_matrix[new_point.p.x][new_point.p.y] == BLANK) {//如果这个点是通道
 						if (new_point.p == end) {
 							return true;
 						}
@@ -202,6 +175,15 @@ bool maze_solver::Astar(const vector<vector<char>> &maze_matrix, const point &en
 }
 
 bool maze_solver::operator()(METHOD method, const vector<vector<char>> &maze_matrix, const point &end, const point& person_point) {
+	if (maze_matrix[end.x][end.y] != BLANK) {//如果终点不是通道
+		return false;
+	}
+	else if (maze_matrix[person_point.x][person_point.y] != BLANK) {//如果起点不是通道
+		return false;
+	}
+	else if (person_point == end) {
+		return true;
+	}
 	switch (method) {
 	case bfs:
 		return bfs_maze_solver(maze_matrix, end, person_point);
@@ -239,8 +221,8 @@ vector<point> maze_solver::get_pace(const vector<vector<char>> &maze_matrix, con
 
 				new_point->p = direction + temp_point->p;
 				if (is_inside(new_point->p)) {//如果点在边境内
-					if (zero_matrix[new_point->p.x][new_point->p.y] == 0) {//如果这个点没有走过
-						if (maze_matrix[new_point->p.x][new_point->p.y] == 1) {//如果这个点是通道
+					if (zero_matrix[new_point->p.x][new_point->p.y] == false) {//如果这个点没有走过
+						if (maze_matrix[new_point->p.x][new_point->p.y] == BLANK) {//如果这个点是通道
 							if (new_point->p == end) {//如果这个点是终点
 
 								new_point->last_p = temp_point;
@@ -253,7 +235,7 @@ vector<point> maze_solver::get_pace(const vector<vector<char>> &maze_matrix, con
 								return result;
 							}
 							//不是终点,但是是新的点
-							zero_matrix[new_point->p.x][new_point->p.y] = 1;//记录走过的点
+							zero_matrix[new_point->p.x][new_point->p.y] = true;//记录走过的点
 							new_point->last_p = temp_point;
 							new_loop.push_back(new_point);//这个点不是终点,同样记录并压栈,并开始下一次遍历
 						}
