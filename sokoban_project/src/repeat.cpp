@@ -1,11 +1,12 @@
 #include "repeat.h"
 #include "constant.h"
+#include <cstdlib>
 
 using namespace constant;
 using namespace std;
 
 size_t repeat::get_num::operator()(const game_node* mmm) const {
-	//cout << "ÎÒ±»Ö´ÐÐ" << endl;
+	//cout << "ï¿½Ò±ï¿½Ö´ï¿½ï¿½" << endl;
 	size_t result = 0;
 	for (auto x = mmm->box_list.begin(); x != mmm->box_list.end(); x++) {
 		result = result ^ zobrist[(*x).x][(*x).y];
@@ -14,7 +15,7 @@ size_t repeat::get_num::operator()(const game_node* mmm) const {
 }
 
 bool repeat::cmp::operator()(const game_node* mmm,const game_node* nnn) const {
-	//cout << "ÎÒ±»Ö´ÐÐ" << endl;
+	//cout << "ï¿½Ò±ï¿½Ö´ï¿½ï¿½" << endl;
 	return *mmm == *nnn;
 }
 

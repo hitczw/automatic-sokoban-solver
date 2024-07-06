@@ -2,7 +2,7 @@
 
 #include "game_node.h"
 #include <unordered_set>
-
+#include <cstddef>
 class repeat {
 public:
 	class get_num {
