@@ -3,54 +3,54 @@
 using namespace std;
 
 point::point(char xx, char yy) {
-	x = xx;
-	y = yy;
+    x = xx;
+    y = yy;
 }
 
 point::point(const point &a) {
-	x = a.x;
-	y = a.y;
+    x = a.x;
+    y = a.y;
 }
 
 point point::operator+(const point &a)const {
-	point result(a.x + x, a.y + y);
-	return result;
+    point result(a.x + x, a.y + y);
+    return result;
 }
 
 point point::operator-(const point &a)const{
-	point result(x - a.x, y - a.y);
-	return result;
+    point result(x - a.x, y - a.y);
+    return result;
 }
 
 point point::operator*(char m) const{
-	point result(x*m, y*m);
-	return result;
+    point result(x*m, y*m);
+    return result;
 }
 
 point& point::operator=(const point &a) {
-	x = a.x;
-	y = a.y;
-	return *this;
+    x = a.x;
+    y = a.y;
+    return *this;
 }
 
 bool point::operator==(const point &a)const {
-	return (a.x == x && a.y == y);
+    return (a.x == x && a.y == y);
 }
 
 bool point::operator!=(const point &a)const {
-	return (a.x != x || a.y != y);
+    return (a.x != x || a.y != y);
 }
 
 bool point::operator<(const point &a)const {
-	if (y != a.y) { return y < a.y; }
-	return x < a.x;
+    if (y != a.y) { return y < a.y; }
+    return x < a.x;
 }
 
 void point::show()const {
-	cout << "x:" << (int)x << " y:" << (int)y << endl;
+    cout << "x:" << (int)x << " y:" << (int)y << endl;
 }
 
 int point::get_distance(const point& p)const {
-	return abs(x - p.x) + abs(y - p.y);
+    return abs(x - p.x) + abs(y - p.y);
 }
 

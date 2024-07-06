@@ -9,5 +9,5 @@ vector<vector<bool>> constant::end_vec;
 vector<vector<bool>> constant::matrix0;
 
 bool constant::is_inside(const point &p){
-	return (p.x >= 0 && p.x <= m - 1 && p.y >= 0 && p.y <= n - 1);
+    return (p.x >= 0 && p.x <= m - 1 && p.y >= 0 && p.y <= n - 1);
 }
