@@ -15,7 +15,7 @@ void draw_picture::draw_pic(vector<vector<char>>& matrix) {
 #ifdef _WIN32
 	system("cls");
 #else
-	printf ("\033c"); //Çå¿Õ¿ØÖÆÌ¨
+	printf ("\033c"); //ï¿½ï¿½Õ¿ï¿½ï¿½ï¿½
 #endif
 	cout<<"w for next, s for back, space for initial, q for quit" << endl;
 	for (int a = 0; a < m; a++) {
@@ -32,7 +32,7 @@ point draw_picture::get_end(game_node& first, game_node& second) {
 	auto f_box = first.box_list;
 	point p;
 	for (auto s = s_box.begin(); s != s_box.end(); s++) {
-		if (f_box.find(*s) == f_box.end()) {//Õâ¸öµãÔÚsecondÖÐÓÐ,firstÖÐÎÞ
+		if (f_box.find(*s) == f_box.end()) {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½secondï¿½ï¿½ï¿½ï¿½,firstï¿½ï¿½ï¿½ï¿½
 			p = *s;
 			break;
 		}
@@ -93,7 +93,7 @@ void draw_picture::draw(vector<game_node>& sss) {
 		new_settings.c_cc[VMIN] = 1;  
 		tcsetattr (0, TCSANOW, &new_settings); 
 		key = getchar();  
-		putchar('\b'); // É¾³ý»ØÏÔ  
+		putchar('\b'); // É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		tcsetattr (0, TCSANOW, &stored_settings);
 #endif  
 	
