@@ -4,6 +4,7 @@
 #include "repeat.h"
 #include <deque>
 #include <iostream>
+#include <cstdint>
 #include <time.h>
 
 using namespace constant;
