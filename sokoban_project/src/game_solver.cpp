@@ -2,6 +2,7 @@
 #include "constant.h"
 #include "locked.h"
 #include "repeat.h"
+#include "solver_template.h"
 #include <deque>
 #include <iostream>
 #include <cstdint>
@@ -10,7 +11,7 @@
 using namespace constant;
 using namespace std;
 
-void detect_legal::get_value(const vector<vector<char>>& maze_matrix, point& person_point) {
+void detect_legal::get_value(const vector<vector<char>>& maze_matrix, const point& person_point) {
     deque<point> for_loop;
     for_loop.push_back(person_point);
     point new_point;
@@ -33,7 +34,7 @@ void detect_legal::get_value(const vector<vector<char>>& maze_matrix, point& per
     }
 }
 
-detect_legal::detect_legal(game_node* node) {
+detect_legal::detect_legal(const game_node* node) {
     value = vector<vector<bool>>(m, vector<bool>(n, false));
     node->get_matrix0(matrix_with_box);
     get_value(matrix_with_box,node->person_point);
@@ -59,36 +60,11 @@ bool detect_legal::can_box_move(point& box, point& person) {
     return matrix_with_box[new_point.x][new_point.y] == BLANK;
 }
 
-
-Astar_node::Astar_node() {
-    f = 0;
-    g = 0;
-    h = 0;
-}
-
-Astar_node::Astar_node(game_node& c):game_node(c) {
-    f = 0;
-    g = 0;
-    h = 0;
-}
-
-void Astar_node::get_f(vector<vector<int>>& vec) {
-    f = 0;
-    for (auto i = box_list.begin(); i != box_list.end(); i++) {
-        auto p = *i;
-        f += vec[p.x][p.y];
-    }
-}
-
-bool Astar_node::operator<(const Astar_node& b)const{
-    return f < b.f;
-}
-
 game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn) {
 
     m = mm;
     n = nn;
-    matrix0  =       vector<vector<bool>>(mm, vector<bool>(nn, false));
+    matrix0  = vector<vector<bool>>(mm, vector<bool>(nn, false));
     end_vec = vector<vector<bool>>(mm, vector<bool>(nn, false));
     blank_matrix = vector<vector<char>>(mm, vector<char>(nn, 0));
 
@@ -159,7 +135,7 @@ int game_solver::get_nums(game_node input) {
     while (!temp_vec.empty()) {
         game_node* node = temp_vec.back();
         temp_vec.pop_back();
-        detect_legal  test(node);
+        detect_legal test(node);
         for (auto item = node->box_list.begin(); item != node->box_list.end(); item++) {
             auto box = *item;
             for (auto direction : four_direction) {
@@ -258,29 +234,21 @@ vector<vector<int>> game_solver::Astar_init() {
     return result;
 }
 
-bool game_solver::cmp::operator()(const Astar_node* a, const Astar_node* b)const {
-    return *a < *b;
-}
-
-vector<game_node> game_solver::Astar_solver() {
+vector<game_node> game_solver::test_template(int input){
+    repeat rpt(init);
+    locked lk(init);
     auto vec = Astar_init();
+    
+    auto is_visited = [&](const game_node* n) -> bool {
+        return rpt.is_repeat2(n);
+    };
 
-    multiset<Astar_node*, cmp> open;
-    repeat closed(init);
-    locked lc(init);
-    vector<game_node>result;
-    Astar_node start_p;
-    start_p = init;
-    open.insert(&start_p);
-    vector<Astar_node*> for_del;
+    auto mark_visited = [&](const game_node* n) {
+        rpt.insert(n);
+    };
 
-    cout << "compute start!..." << endl;
-    auto t1 = clock();
-    while (!open.empty()) {
-        auto n_min = *(open.begin());
-        open.erase(open.begin());
-        detect_legal  test(n_min);
-
+    auto get_neighbors = [&](const game_node* n_min, std::function<void(const game_node*)> callback) {
+        detect_legal test(n_min);
         for (auto item = n_min->box_list.begin(); item != n_min->box_list.end(); item++) {
             auto box = *item;
             for (auto direction : four_direction) {
@@ -289,43 +257,58 @@ vector<game_node> game_solver::Astar_solver() {
                     if (test.can_box_move(box, new_point)) {
 
                         auto new_box_point = *item * 2 - new_point;
-                        auto temp_box2 = new Astar_node();
+                        auto temp_box2 = new game_node();
                         n_min->get_moved(*item, new_box_point, temp_box2);
                         vector<vector<char>>temp_matrix2;
                         temp_box2->get_matrix0(temp_matrix2);
-                        temp_box2->last_state = n_min;
 
-                        if (lc.is_locked(new_box_point, temp_matrix2) || closed.is_repeat((temp_box2))) {
+                        if (lk.is_locked(new_box_point, temp_matrix2)) {
+                            //todo
                             delete temp_box2;
                         }
 
-                        else if (temp_box2->game_over()) {
-                            cout << "compute complete!" << endl;
-                            auto t2 = clock();
-                            cout << "time cost " << (double)( t2-t1)/CLOCKS_PER_SEC<< "s" << endl;
-                            auto nd = (game_node*)(temp_box2);
-
-                            while (nd) {
-                                result.push_back(*nd);
-                                nd = nd->last_state;
-                            }
-
-                            for (auto x : for_del) { delete x; }
-                            cout << "all status " << closed.zobrist_hash.size() << endl;
-                            cout << "push box times " << result.size() - 1 << endl;
-                            return result;
-                        }
-
                         else {
-                            temp_box2->get_f(vec);
-                            open.insert(temp_box2);
-                            for_del.push_back(temp_box2);
+                            callback(temp_box2);
                         }
-                    }
-                }
-            }
+                    }}}}
+    };
+
+    auto is_equal = [](const game_node* a, const game_node* b) -> bool {
+        return a->game_over();
+    };//todo:实际只用来判断终点，但终点和普通节点判断逻辑不同
+
+    auto heuristic = [&](const game_node* a, const game_node* b) {
+        int f = 0;
+        for (auto i = a->box_list.begin(); i != a->box_list.end(); i++) {
+            auto p = *i;
+            f += vec[p.x][p.y];
         }
+        return f;
+    };
+
+    Solver_template<vector<game_node>, game_node, Method::a_star> gsolver0;
+    Solver_template<vector<game_node>, game_node, Method::bfs> gsolver1;
+    Solver_template<vector<game_node>, game_node, Method::dfs> gsolver2;
+    vector<game_node> resx;
+    printf("compute start!!\n");
+    auto t1 = clock();
+    if (input == 0)
+    {
+        resx = gsolver0.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
     }
-    cout << "unsolveble" << endl;
-    exit(1000);
+    else if (input == 1)
+    {
+        resx = gsolver1.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
+    }
+    else if (input == 2)
+    {
+        resx = gsolver2.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
+    }
+    else{}
+    auto t2 = clock();
+    printf("compute complete!!\n");
+    printf("time cost %fs\n", (double)( t2-t1)/CLOCKS_PER_SEC);
+    printf("push box %d times\n", resx.size());
+    printf("all status %d\n", rpt.zobrist_hash.size());
+    return resx;
 }

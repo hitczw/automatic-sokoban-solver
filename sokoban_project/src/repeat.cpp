@@ -29,9 +29,16 @@ repeat::repeat(game_node& init) {
     zobrist_hash.insert(&init);
 }
 
-bool repeat::is_repeat(game_node* temp_box2) {
+bool repeat::is_repeat(const game_node* temp_box2) {
     return !zobrist_hash.insert(temp_box2).second;
 }
 
-vector<vector<size_t>> repeat::zobrist;
+bool repeat::is_repeat2(const game_node* temp_box2){
+    return zobrist_hash.find(temp_box2) != zobrist_hash.end();
+}
 
+void repeat::insert(const game_node* temp_box2) {
+    zobrist_hash.insert(temp_box2);
+}
+
+vector<vector<size_t>> repeat::zobrist;

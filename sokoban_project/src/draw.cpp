@@ -2,6 +2,7 @@
 #include "constant.h"
 #include "mazesolver.h"
 #include <iostream>
+#include <cassert>
 #ifdef _WIN32 
     #include <conio.h>  
 #else  //Linux platform  
@@ -43,13 +44,13 @@ point draw_picture::get_end(game_node& first, game_node& second) {
 vector<game_node> draw_picture::get_complete(const vector<game_node>& input) {
     vector<game_node> output;
     output.push_back(input[0]);
-    maze_solver maze;
+    
     for (int i = 0; i < input.size() - 1; i++) {
         auto first = input[i + 1];
         auto second = input[i];
         auto end_p = get_end(first, second);
-        auto path = maze.get_pace(first.get_matrix(), end_p, first.person_point);
-
+        maze_solver<Method::bfs, vector<point>> maze;
+        vector<point> path = maze.solve(first.get_matrix(), first.person_point, end_p);
         for (int j = 0; j < path.size(); j++) {
             first.person_point = path[j];
             output.push_back(first);
@@ -78,10 +79,9 @@ void draw_picture::draw(vector<game_node>& sss) {
     char key;
 
     while (1) {
-
-#ifdef _WIN32  
-        key = getch();  
-#else  
+#ifdef _WIN32
+        key = getch();
+#else
         struct termios stored_settings;
         struct termios new_settings;
         tcgetattr (0, &stored_settings);
@@ -93,8 +93,7 @@ void draw_picture::draw(vector<game_node>& sss) {
         key = getchar();
         putchar('\b');
         tcsetattr (0, TCSANOW, &stored_settings);
-#endif  
-    
+#endif
         if (key == 'w') {
             if(i == 0){continue;}
             i = i - 1;

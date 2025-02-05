@@ -114,12 +114,10 @@ locked::locked(game_node& init) {
                     for (char k = last_i; k < i; k++) {
                         side_point[k][j] = true;
                     }
-
                 }
                 up_down_lock = true;
                 has_blank = false;
                 has_end = false;
-
                 continue;
             }
 
@@ -132,7 +130,6 @@ locked::locked(game_node& init) {
                 if (end_vec[i][j] == true) {
                     has_end = true;
                 }
-
             }
             if (blank_matrix[i][j-1] == BLANK && blank_matrix[i][j+1] == BLANK) {
                 up_down_lock = false;
@@ -171,4 +168,3 @@ bool locked::is_locked(point& box, vector<vector<char>>& matrix_with_box) {
     if (around.empty()) { return false; }
     return locked_double(matrix_with_box, box, around[0]);
 }
-

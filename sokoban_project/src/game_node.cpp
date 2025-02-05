@@ -1,6 +1,7 @@
 #include "game_node.h"
 #include "mazesolver.h"
 #include "constant.h"
+#include <cstdio>
 
 using namespace constant;
 using namespace std;
@@ -58,15 +59,13 @@ bool game_node::operator==(const game_node &a)const {
     if (a.box_list == box_list) {
         vector<vector<char>> temp_matrix2;
         get_matrix0(temp_matrix2);
-        maze_solver maze;
-        if (maze(maze_solver::dfs,temp_matrix2, a.person_point, person_point)) {
-            return true;
-        }
+        maze_solver<Method::a_star, bool> maze;
+        return maze.solve(temp_matrix2, a.person_point, person_point);
     }
     return false;
 }
 
-bool game_node::game_over() {
+bool game_node::game_over() const {
     for (auto i = box_list.begin(); i != box_list.end(); i++) {
         auto p = *i;
         if (end_vec[p.x][p.y] == false) {return false;}
@@ -74,7 +73,7 @@ bool game_node::game_over() {
     return true;
 }
 
-void game_node::get_moved(const point& box_before, point& box_new,game_node* result) {
+void game_node::get_moved(const point& box_before, point& box_new,game_node* result) const {
     *result = *this;
     auto item = result->box_list.find(box_before);
     result->box_list.erase(item);

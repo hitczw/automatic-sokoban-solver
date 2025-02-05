@@ -3,6 +3,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cassert>
+#include <limits>
+#include <cstdlib>
 using namespace std;
 
 void read_file(int& mm, int& nn, string& temp){
@@ -43,17 +46,31 @@ int main() {
     string temp;
     read_file(mm,nn,temp);
     
+    printf("please select your algorithm(enter 0 or 1 or 2)\n");
+    printf("0: A*;    1: dfs    2: bfs\n");
+    char input;
+    int iinput;
+    std::cin >> input;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (input == '0' || input == '1' || input == '2') {
+        iinput = input - '0'; // 将字符转换为对应的整数
+    }
+    else {
+        printf("wrong input!!\n");
+        exit(-1);
+    }
+
     game_solver ga(temp,mm,nn);
-    
-    auto ss=ga.Astar_solver();
+
+    auto ss = ga.test_template(iinput);
 
     cout << "press Enter to show solves"<<endl;
 
-    cin.get();
+    auto chx = cin.get();
     draw_picture d;
     d.draw(ss);
-    
+
 #ifdef _WIN32
-        system("pause");
+    system("pause");
 #endif
 }

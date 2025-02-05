@@ -49,8 +49,3 @@ bool point::operator<(const point &a)const {
 void point::show()const {
     cout << "x:" << (int)x << " y:" << (int)y << endl;
 }
-
-int point::get_distance(const point& p)const {
-    return abs(x - p.x) + abs(y - p.y);
-}
-
