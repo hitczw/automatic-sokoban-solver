@@ -8,7 +8,7 @@ class game_node {
 private:
 
 public:
-    
+
     std::set<point> box_list;
     game_node* last_state;
     point person_point;
@@ -25,8 +25,7 @@ public:
 
     bool operator==(const game_node &a)const;
 
-    bool game_over();
+    bool game_over()const;
 
-    void get_moved(const point& box_before, point& box_new,game_node* result);
+    void get_moved(const point& box_before, point& box_new,game_node* result)const;
 };
-

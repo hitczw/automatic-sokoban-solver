@@ -3,6 +3,12 @@
 #include "point.h"
 #include <vector>
 
+enum class Method {
+    bfs,
+    dfs,
+    a_star
+};
+
 namespace constant {
     extern char m;
     extern char n;
@@ -23,4 +29,3 @@ namespace constant {
     
     bool is_inside(const point &p);
 }
-

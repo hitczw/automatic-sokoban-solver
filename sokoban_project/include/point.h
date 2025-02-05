@@ -25,7 +25,4 @@ public:
     bool operator<(const point &a)const;
 
     void show()const;
-
-    int get_distance(const point& p)const;
 };
-
