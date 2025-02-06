@@ -4,7 +4,6 @@
 #include "repeat.h"
 #include "solver_template.h"
 #include <deque>
-#include <iostream>
 #include <cstdint>
 #include <time.h>
 
@@ -119,62 +118,29 @@ game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn) {
         }
     }
 
-    init = game_node(box_point_start,person_start,0);
+    init = game_node(box_point_start,person_start);
+    set_lambda_function();
 }
 
-int game_solver::get_nums(game_node input) {
+int game_solver::get_nums2(game_node input) {
     auto p = *(input.box_list.begin());
     if (end_vec[p.x][p.y] == true) { return 0; }
-    locked lc(input);
-    repeat rp(input);
+    
+    rpt.init(input);
+    lk.init();
+
     int result=0;
     deque<game_node*> temp_vec;
     temp_vec.push_back(&input);
     vector<game_node*> for_del;
 
-    while (!temp_vec.empty()) {
-        game_node* node = temp_vec.back();
-        temp_vec.pop_back();
-        detect_legal test(node);
-        for (auto item = node->box_list.begin(); item != node->box_list.end(); item++) {
-            auto box = *item;
-            for (auto direction : four_direction) {
-                auto new_point = box + direction;
-                if (test.can_get(new_point)) {
-                    if (test.can_box_move(box, new_point)) {
-
-                        auto new_box_point = *item * 2 - new_point;
-                        auto temp_box2 = new game_node();
-                        node->get_moved(*item, new_box_point, temp_box2);
-                        vector<vector<char>>temp_matrix2;
-                        temp_box2->get_matrix0(temp_matrix2);
-                        temp_box2->last_state = node;
-
-                        if (lc.is_locked(new_box_point, temp_matrix2) || rp.is_repeat(temp_box2)) {
-                            delete temp_box2;
-                        }
-
-                        else if (temp_box2->game_over()) {
-                            while (temp_box2) {
-                                result += 1;
-                                temp_box2 = temp_box2->last_state;
-                            }
-
-                            for (auto &x : for_del) { delete x; }
-                            return result-1;
-                        }
-
-                        else {
-                            temp_vec.push_front(temp_box2);
-                            for_del.push_back(temp_box2);
-                        }
-                    }
-                }
-            }
-        }
+    Solver_template<vector<game_node>, game_node, Method::bfs> gsolver1;
+    auto resx = gsolver1.solve(&input, nullptr, get_neighbors, is_visited, mark_visited, is_equal);
+    if (resx.size() == 0)
+    {
+        return 1000;
     }
-    result = 1000;
-    return result;
+    return resx.size();
 }
 
 vector<point> game_solver::get_legal_point(vector<vector<char>>& vec, point p) {
@@ -204,7 +170,7 @@ vector<point> game_solver::get_legal_point(vector<vector<char>>& vec, point p) {
 
 vector<vector<int>> game_solver::Astar_init() {
     vector<vector<int>> result(m,vector<int>(n,0));
-    
+
     for (int i = 0; i <m; i++) {
         for (int j = 0; j < n; j++) {
             if (blank_matrix[i][j] == WALL) {
@@ -223,7 +189,7 @@ vector<vector<int>> game_solver::Astar_init() {
             int min_num=INT32_MAX;
             for (auto& dd : person_point){
                 new_node.person_point = dd;
-                int min_ = get_nums(new_node);
+                int min_ = get_nums2(new_node);
                 if (min_ < min_num) {
                     min_num = min_;
                 }
@@ -234,20 +200,17 @@ vector<vector<int>> game_solver::Astar_init() {
     return result;
 }
 
-vector<game_node> game_solver::test_template(int input){
-    repeat rpt(init);
-    locked lk(init);
-    auto vec = Astar_init();
-    
-    auto is_visited = [&](const game_node* n) -> bool {
+void game_solver::set_lambda_function(){
+
+    is_visited = [&](const game_node* n) -> bool {
         return rpt.is_repeat2(n);
     };
 
-    auto mark_visited = [&](const game_node* n) {
+    mark_visited = [&](const game_node* n) {
         rpt.insert(n);
     };
 
-    auto get_neighbors = [&](const game_node* n_min, std::function<void(const game_node*)> callback) {
+    get_neighbors = [&](const game_node* n_min, std::function<void(const game_node*)> callback) {
         detect_legal test(n_min);
         for (auto item = n_min->box_list.begin(); item != n_min->box_list.end(); item++) {
             auto box = *item;
@@ -273,9 +236,16 @@ vector<game_node> game_solver::test_template(int input){
                     }}}}
     };
 
-    auto is_equal = [](const game_node* a, const game_node* b) -> bool {
+    is_equal = [](const game_node* a, const game_node* b) -> bool {
         return a->game_over();
     };//todo:实际只用来判断终点，但终点和普通节点判断逻辑不同
+
+}
+
+vector<game_node> game_solver::test_template(int input){
+    auto vec = Astar_init();
+    rpt.init(init);
+    lk.init();
 
     auto heuristic = [&](const game_node* a, const game_node* b) {
         int f = 0;
@@ -298,16 +268,16 @@ vector<game_node> game_solver::test_template(int input){
     }
     else if (input == 1)
     {
-        resx = gsolver1.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
+        resx = gsolver1.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal);
     }
     else if (input == 2)
     {
-        resx = gsolver2.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
+        resx = gsolver2.solve(&init, nullptr, get_neighbors, is_visited, mark_visited, is_equal);
     }
     else{}
     auto t2 = clock();
     printf("compute complete!!\n");
-    printf("time cost %fs\n", (double)( t2-t1)/CLOCKS_PER_SEC);
+    printf("time cost %fs\n", (double)(t2-t1)/CLOCKS_PER_SEC);
     printf("push box %d times\n", resx.size());
     printf("all status %d\n", rpt.zobrist_hash.size());
     return resx;

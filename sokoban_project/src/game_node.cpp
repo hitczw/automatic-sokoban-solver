@@ -1,20 +1,16 @@
 #include "game_node.h"
 #include "mazesolver.h"
 #include "constant.h"
-#include <cstdio>
 
 using namespace constant;
 using namespace std;
 
-game_node::game_node(set<point>& bxp,point& ps,game_node* last) {
+game_node::game_node(set<point>& bxp,point& ps) {
     box_list = bxp;
     person_point = ps;
-    last_state = 0;
 }
 
-game_node::game_node(){
-    last_state = 0;
-}
+game_node::game_node(){}
 
 void game_node::get_matrix0(vector<vector<char>>& result)const {
     result = blank_matrix;

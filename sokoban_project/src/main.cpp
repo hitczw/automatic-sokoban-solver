@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cassert>
 #include <limits>
 #include <cstdlib>
 using namespace std;

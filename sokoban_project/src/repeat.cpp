@@ -19,13 +19,14 @@ bool repeat::cmp::operator()(const game_node* mmm,const game_node* nnn) const {
 
 repeat::repeat(){}
 
-repeat::repeat(game_node& init) {
+void repeat::init(game_node& init) {
     zobrist = vector<vector<size_t>>(m, vector<size_t>(n, 0));
     for (auto& a : zobrist) {
         for (auto& b : a) {
             b = rand() ^ ((size_t)rand() << 15) ^ ((size_t)rand() << 30) ^ ((size_t)rand() << 45) ^ ((size_t)rand() << 60);
         }
     }
+    zobrist_hash.clear();
     zobrist_hash.insert(&init);
 }
 

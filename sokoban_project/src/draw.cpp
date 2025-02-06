@@ -2,7 +2,6 @@
 #include "constant.h"
 #include "mazesolver.h"
 #include <iostream>
-#include <cassert>
 #ifdef _WIN32 
     #include <conio.h>  
 #else  //Linux platform  

@@ -59,7 +59,7 @@ bool locked::is_next_two_wall(vector<point> &around) {
     return abs(around[0].x - around[1].x) == 1;
 }
 
-locked::locked(game_node& init) {
+void locked::init(){
     side_point = matrix0;
     side_point[0][0] = true;
     side_point[0][n - 1] = true;
@@ -157,6 +157,8 @@ locked::locked(game_node& init) {
         }
     }
 }
+
+locked::locked() {}
 
 bool locked::is_locked(point& box, vector<vector<char>>& matrix_with_box) {
     if (side_point[box.x][box.y] == true) { return true; }
