@@ -22,7 +22,7 @@ How to compile?
 
 How to run?
 
-    ./soboban_solver
+    ./sokoban_solver
 
 Rules?
 
