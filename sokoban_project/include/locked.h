@@ -1,6 +1,7 @@
 #pragma once
 
-#include "game_node.h"
+#include "point.h"
+#include <vector>
 
 class locked {
 private:
@@ -10,7 +11,7 @@ private:
     bool is_next_two_wall(std::vector<point> &around);
 
 public:
-    locked(){}
-    locked(game_node& init);
+    locked();
+    void init();
     bool is_locked(point& box, std::vector<std::vector<char>>& matrix_with_box);
 };

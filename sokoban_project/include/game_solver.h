@@ -1,7 +1,10 @@
 #pragma once
 
 #include "game_node.h"
+#include "repeat.h"
+#include "locked.h"
 #include <string>
+#include <functional>
 
 class detect_legal {
 private:
@@ -27,10 +30,18 @@ class game_solver {
 public:
 
     game_node init;
+    repeat rpt;
+    locked lk;
+    std::function<void(const game_node*, std::function<void(const game_node*)>)> get_neighbors;
+    std::function<bool(const game_node*)> is_visited;
+    std::function<void(const game_node*)> mark_visited;
+    std::function<bool(const game_node*, const game_node*)> is_equal;
 
     game_solver(std::string& game_map, unsigned int mm, unsigned int nn);
-    
-    int get_nums(game_node input);
+
+    int get_nums2(game_node input);
+
+    void set_lambda_function();
 
     std::vector<point> get_legal_point(std::vector<std::vector<char>>& vec, point p);
 

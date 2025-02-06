@@ -10,10 +10,9 @@ private:
 public:
 
     std::set<point> box_list;
-    game_node* last_state;
     point person_point;
 
-    game_node(std::set<point>& bxp,point& ps,game_node* last=0);
+    game_node(std::set<point>& bxp,point& ps);
 
     game_node();
 

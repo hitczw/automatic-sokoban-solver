@@ -2,7 +2,6 @@
 
 #include "game_node.h"
 #include <unordered_set>
-#include <cstddef>
 
 class repeat {
 public:
@@ -21,10 +20,8 @@ public:
     std::unordered_set<const game_node*, get_num, cmp> zobrist_hash;
 
     repeat();
-    repeat(game_node& init);
-
+    void init(game_node& init);
     bool is_repeat(const game_node* temp_box2);
-
     bool is_repeat2(const game_node* temp_box2);
     void insert(const game_node* temp_box2);
 };
