@@ -1,12 +1,12 @@
-#include "draw.h"
-#include "constant.h"
-#include "mazesolver.h"
-#include <iostream>
+#include <cstdio>
 #ifdef _WIN32 
     #include <conio.h>  
 #else  //Linux platform  
     #include <termios.h>  
 #endif
+#include "draw.h"
+#include "constant.h"
+#include "mazesolver.h"
 
 using namespace constant;
 using namespace std;
@@ -17,14 +17,13 @@ void draw_picture::draw_pic(vector<vector<char>>& matrix) {
 #else
     printf ("\033c");
 #endif
-    cout<<"w for next, s for back, space for initial, q for quit" << endl;
-    for (int a = 0; a < m; a++) {
-        for (int b = 0; b < n; b++) {
-            cout<<symbols[matrix[a][b]];
+    printf("w for next, s for back, space for initial, q for quit\n");
+    for (auto &a: matrix) {
+        for (auto &b: a) {
+            printf("%c", symbols[int(b)]);
         }
-        cout<<endl;
+        printf("\n");
     }
-    cout<<endl;
 }
 
 point draw_picture::get_end(game_node& first, game_node& second) {
@@ -44,14 +43,15 @@ vector<game_node> draw_picture::get_complete(const vector<game_node>& input) {
     vector<game_node> output;
     output.push_back(input[0]);
     
-    for (int i = 0; i < input.size() - 1; i++) {
+    for (size_t i = 0; i < input.size() - 1; i++) {
         auto first = input[i + 1];
         auto second = input[i];
         auto end_p = get_end(first, second);
         maze_solver<Method::bfs, vector<point>> maze;
         vector<point> path = maze.solve(first.get_matrix(), first.person_point, end_p);
-        for (int j = 0; j < path.size(); j++) {
-            first.person_point = path[j];
+        for (auto &p: path)
+        {
+            first.person_point = p;
             output.push_back(first);
         }
     }
@@ -72,7 +72,7 @@ draw_picture::draw_picture() {
 void draw_picture::draw(vector<game_node>& sss) {
 
     auto ss = get_complete(sss);
-    int i = ss.size() - 1;
+    size_t i = ss.size() - 1;
     auto matrix = ss[i].get_matrix2();
     draw_pic(matrix);
     char key;

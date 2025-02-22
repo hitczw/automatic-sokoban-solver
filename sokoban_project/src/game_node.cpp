@@ -69,7 +69,7 @@ bool game_node::game_over() const {
     return true;
 }
 
-void game_node::get_moved(const point& box_before, point& box_new,game_node* result) const {
+void game_node::get_moved(const point& box_before, point& box_new, game_node* result) const {
     *result = *this;
     auto item = result->box_list.find(box_before);
     result->box_list.erase(item);

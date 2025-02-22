@@ -1,6 +1,6 @@
+#include <cstdlib>
 #include "repeat.h"
 #include "constant.h"
-#include <cstdlib>
 
 using namespace constant;
 using namespace std;
@@ -28,10 +28,6 @@ void repeat::init(game_node& init) {
     }
     zobrist_hash.clear();
     zobrist_hash.insert(&init);
-}
-
-bool repeat::is_repeat(const game_node* temp_box2) {
-    return !zobrist_hash.insert(temp_box2).second;
 }
 
 bool repeat::is_repeat2(const game_node* temp_box2){

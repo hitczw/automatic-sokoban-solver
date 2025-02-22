@@ -1,10 +1,11 @@
-#include "game_solver.h"
-#include "draw.h"
+#include <cstdio>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <limits>
-#include <cstdlib>
+#include "game_solver.h"
+#include "draw.h"
+
 using namespace std;
 
 void read_file(int& mm, int& nn, string& temp){
@@ -15,7 +16,7 @@ void read_file(int& mm, int& nn, string& temp){
     file_read.open("box.txt",ios::in);
 
     if (!file_read) {
-        cout << "box.txt dose not exist!" << endl;
+        printf("box.txt dose not exist!\n");
 #ifdef _WIN32
         system("pause");
 #endif
@@ -28,9 +29,8 @@ void read_file(int& mm, int& nn, string& temp){
         tempr += x;
         mm += 1;
     }
-    for(int i=0;i<tempr.size();i++){
-        char tc=tempr[i];
-        if(tc!='\r'&&tc!='\n'){
+    for(auto &tc: tempr){
+        if(tc != '\r' && tc != '\n'){
             temp.push_back(tc);
         }
     }
@@ -63,9 +63,9 @@ int main() {
 
     auto ss = ga.test_template(iinput);
 
-    cout << "press Enter to show solves"<<endl;
+    printf("press Enter to show solves\n");
 
-    auto chx = cin.get();
+    cin.get();
     draw_picture d;
     d.draw(ss);
 

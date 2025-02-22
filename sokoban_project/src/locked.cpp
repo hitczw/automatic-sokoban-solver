@@ -1,6 +1,7 @@
+#include <cmath>
 #include "locked.h"
 #include "constant.h"
-#include <cmath>
+
 using namespace constant;
 using namespace std;
 
