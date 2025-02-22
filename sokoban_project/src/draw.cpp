@@ -1,8 +1,10 @@
 #include <cstdio>
-#ifdef _WIN32 
-    #include <conio.h>  
-#else  //Linux platform  
-    #include <termios.h>  
+#include <string>
+#ifdef _WIN32
+    #include <conio.h>
+    #include <windows.h>
+#else  //Linux platform
+    #include <termios.h>
 #endif
 #include "draw.h"
 #include "constant.h"
@@ -13,17 +15,30 @@ using namespace std;
 
 void draw_picture::draw_pic(vector<vector<char>>& matrix) {
 #ifdef _WIN32
-    system("cls");
+    static HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO originalCursorInfo;
+    GetConsoleCursorInfo(hConsole, &originalCursorInfo);
+    CONSOLE_CURSOR_INFO newCursorInfo = originalCursorInfo;
+    newCursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(hConsole, &newCursorInfo);
+    SetConsoleCursorPosition(hConsole, {0, 0});
 #else
     printf ("\033c");
 #endif
-    printf("w for next, s for back, space for initial, q for quit\n");
-    for (auto &a: matrix) {
-        for (auto &b: a) {
-            printf("%c", symbols[int(b)]);
+    std::string buffer;
+    buffer.reserve(1024);
+    buffer += "w for next, s for back, space for initial, q for quit\n";
+    for (auto& row : matrix) {
+        for (auto& c : row) {
+            buffer += symbols[static_cast<int>(c)];
         }
-        printf("\n");
+        buffer += '\n';
     }
+    printf("%s", buffer.c_str());
+
+#ifdef _WIN32
+    SetConsoleCursorInfo(hConsole, &originalCursorInfo);
+#endif
 }
 
 point draw_picture::get_end(game_node& first, game_node& second) {
@@ -42,7 +57,6 @@ point draw_picture::get_end(game_node& first, game_node& second) {
 vector<game_node> draw_picture::get_complete(const vector<game_node>& input) {
     vector<game_node> output;
     output.push_back(input[0]);
-    
     for (size_t i = 0; i < input.size() - 1; i++) {
         auto first = input[i + 1];
         auto second = input[i];
@@ -70,10 +84,12 @@ draw_picture::draw_picture() {
 }
 
 void draw_picture::draw(vector<game_node>& sss) {
-
     auto ss = get_complete(sss);
     size_t i = ss.size() - 1;
     auto matrix = ss[i].get_matrix2();
+#ifdef _WIN32
+    system("cls");
+#endif
     draw_pic(matrix);
     char key;
 
@@ -91,6 +107,7 @@ void draw_picture::draw(vector<game_node>& sss) {
         tcsetattr (0, TCSANOW, &new_settings);
         key = getchar();
         putchar('\b');
+
         tcsetattr (0, TCSANOW, &stored_settings);
 #endif
         if (key == 'w') {
