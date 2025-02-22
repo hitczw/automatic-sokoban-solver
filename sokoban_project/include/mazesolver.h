@@ -3,23 +3,22 @@
 #include "point.h"
 #include "constant.h"
 #include "solver_template.h"
+#include "my_memory.h"
 #include <vector>
 #include <functional>
+#include <cstdio>
 
 template<Method tmethod, typename Return_Type>
 class maze_solver {
 private:
-    std::vector<std::vector<bool>> zero_matrix;//todo: need check
-
     const std::vector<std::vector<char>>* grid;//todo: need comfirm
 public:
-
+    std::vector<std::vector<bool>> zero_matrix;//todo: need check
     maze_solver(){}
-
     Return_Type solve(const std::vector<std::vector<char>>& _grid, const point& start, const point& end)
     {
-        auto is_visited = [&](const point* n) -> bool {
-            return zero_matrix[n->x][n->y] == true;
+        auto is_visited = [&](const point*) -> bool {
+            return false;
         };
 
         auto mark_visited = [&](const point* n) {
@@ -27,16 +26,11 @@ public:
         };
 
         auto get_neighbors = [&](const point* n, std::function<void(const point*)> callback) {
-            std::vector<point*> points = {
-                new point(n->x + 1, n->y),
-                new point(n->x, n->y + 1),
-                new point(n->x - 1, n->y),
-                new point(n->x, n->y - 1)
-            };
-
-            for (const point* p : points) {
-                if (constant::is_inside(*p) and ((*grid)[p->x][p->y] == constant::BLANK)){
-                    callback(p);
+            for (auto& direction : constant::four_direction) {
+                point p = direction + *n;
+                if (constant::is_inside(p) and ((*grid)[p.x][p.y] == constant::BLANK) and zero_matrix[p.x][p.y] == false){
+                    point* new_point = new(constant::maze_mp.allocate()) point(p.x, p.y);
+                    callback(new_point);
                 }
             }
         };
@@ -52,6 +46,7 @@ public:
         grid = &_grid;
         zero_matrix = constant::matrix0;
         Solver_template<Return_Type, point, tmethod> usolver;
+        constant::maze_mp.clear();
         return usolver.solve(&start, &end, get_neighbors, is_visited, mark_visited, is_equal, heuristic);
     }
 };
