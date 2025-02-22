@@ -38,6 +38,6 @@ private:
     void vars_clear(game_node& input);
 
 public:
-    game_solver(std::string& game_map, unsigned int mm, unsigned int nn);
+    game_solver(std::string& game_map, unsigned int mm, unsigned int nn, int memval);
     std::vector<game_node> test_template(int x);
 };
