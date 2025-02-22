@@ -39,7 +39,7 @@ bool detect_legal::can_box_move(point& box, point& person) {
     return matrix_with_box[new_point.x][new_point.y] == BLANK;
 }
 
-game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn) {
+game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn, int memval) {
     m = mm;
     n = nn;
     matrix0  = vector<vector<bool>>(mm, vector<bool>(nn, false));
@@ -90,7 +90,7 @@ game_solver::game_solver(string& game_map, unsigned int mm, unsigned int nn) {
             }
         }
     }
-    game_mem.init(sizeof(game_node), 1000000);
+    game_mem.init(sizeof(game_node), memval * 1024 * 1024 / sizeof(game_node));
     constant::maze_mp.init(sizeof(point), mm * nn * 4);
     init = game_node(box_point_start,person_start);
     set_lambda_function();

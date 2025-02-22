@@ -59,7 +59,11 @@ int main() {
         exit(-1);
     }
 
-    game_solver ga(temp,mm,nn);
+    printf("please input the memory you want to use(unit: MB)\n");
+    int memval;
+    std::cin >> memval;
+
+    game_solver ga(temp, mm, nn, memval);
 
     auto ss = ga.test_template(iinput);
 
