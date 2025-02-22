@@ -244,8 +244,8 @@ vector<game_node> game_solver::test_template(int input){
     };
 
     Solver_template<vector<game_node>, game_node, Method::a_star> gsolver0;
-    Solver_template<vector<game_node>, game_node, Method::bfs> gsolver1;
-    Solver_template<vector<game_node>, game_node, Method::dfs> gsolver2;
+    Solver_template<vector<game_node>, game_node, Method::dfs> gsolver1;
+    Solver_template<vector<game_node>, game_node, Method::bfs> gsolver2;
     vector<game_node> resx;
     printf("compute start!!\n");
     auto t1 = chrono::high_resolution_clock::now();
