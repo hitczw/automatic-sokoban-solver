@@ -62,6 +62,7 @@ int main() {
     printf("please input the memory you want to use(unit: MB)\n");
     int memval;
     std::cin >> memval;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     game_solver ga(temp, mm, nn, memval);
 
