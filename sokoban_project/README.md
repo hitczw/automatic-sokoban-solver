@@ -16,7 +16,7 @@
 演示视频 bilibili av76908171;
 作者hitczw
 
-How to compile?
+How to build?
 
     cd build
     cmake ..
