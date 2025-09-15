@@ -24,6 +24,7 @@
     cd build
     cmake ..
     make
+    cp ../resource/box.txt ./
 
 构建方法2（运行脚本）：
 
@@ -33,9 +34,13 @@
 
 如何运行？
 
-    进入build目录，sokoban_solver是可执行程序，box.txt存储关卡信息，需要与sokoban_solver同一目录，在resource文件夹中有示例的box.txt存储关卡信息，需要与sokoban_solver同一目录，在resource文件夹中有示例的box
+    进入build目录，sokoban_solver是可执行程序，box.txt存储关卡信息且
+    需要与sokoban_solver同一目录，在resource文件夹中有示例的box.txt
+    构建方法1和构建方法2已将示例box.txt拷贝到build目录中
+    ./sokoban_solver运行
+    示例box.txt选择求解方法0(A*算法)，内存容量32MB已通过测试
 
-规则?
+box.txt格式？
     
     在box.txt输入游戏信息,文件名称不能更改
     在box.txt文件中
