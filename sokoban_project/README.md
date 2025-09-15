@@ -19,11 +19,14 @@
 如何构建?
 
 构建方法1（运行命令）：
+
     mkdir build
     cd build
     cmake ..
     make
+
 构建方法2（运行脚本）：
+
     ./run_build.sh #编译本机应用，linux系统上运行
     ./run_build.sh w #交叉编译windows应用，windows系统运行
     ./run_build.sh r #交叉编译arm应用，可以在树莓派5上运行
