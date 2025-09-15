@@ -16,29 +16,23 @@
 演示视频 bilibili av76908171;
 作者hitczw
 
-How to build?
+如何构建以及运行?(在linux系统可运行如下命令)
 
+    mkdir build
     cd build
     cmake ..
     make
-
-
-How to run?
-
+    cp ../resource/box.txt ./
     ./sokoban_solver
 
-Rules?
+你也可以直接运行脚本编译
 
-    Enter the game information in box.txt. The file name cannot be changed
-    In file box.txt
-    # for wall
-      for blank
-    $ for box
-    * for box in end
-    . for end
-    @ for person
-    + for person in end
-    After information input, save and open the software to start solving
+    ./run_build.sh #编译本机应用，linux系统上运行
+    ./run_build.sh w #交叉编译windows应用，windows系统运行
+    ./run_build.sh r #交叉编译arm应用，可以在树莓派5上运行
+如果是编译本机应用，可直接进入build目录执行sokoban_solver
+
+规则?
     
     在box.txt输入游戏信息,文件名称不能更改
     在box.txt文件中
@@ -50,6 +44,3 @@ Rules?
     @表示人
     +表示人在目的地
     信息输入完成后保存打开软件开始求解
-
-
-
