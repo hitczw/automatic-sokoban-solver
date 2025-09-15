@@ -1,5 +1,9 @@
 # automatic-sokoban-solver
 
+推箱子自动求解程序
+演示视频 bilibili av76908171;
+作者hitczw
+
 202502更新：
 
     1.用120行算法模板，实现ASTAR,DFS,BFS三种算法，用于迷宫求解和游戏求解，减少大量重复代码
@@ -11,10 +15,6 @@
     1.三种算法求解速度一般ASTAR>DFS>BFS，BFS可以找到最小箱子推动次数解法
     2.求解完成后按Enter展示具体解法, w键下一步, s键上一步, space回到起点, q退出
 
-
-推箱子自动求解程序
-演示视频 bilibili av76908171;
-作者hitczw
 
 如何构建?
 
