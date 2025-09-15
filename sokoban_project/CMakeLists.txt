@@ -22,13 +22,11 @@ else()
     # 本机编译，使用系统默认编译器
 endif()
 
-# 其余通用设置保持不变...
 SET(CMAKE_BUILD_TYPE "Release")
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 FILE(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-SET(OUT_NAME sokoban_solver)
+ADD_EXECUTABLE(sokoban_solver ${MY_SRC})
 
-ADD_EXECUTABLE(${OUT_NAME} ${MY_SRC})
-target_compile_options(${OUT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror -O3)
-target_link_options(${OUT_NAME} PRIVATE -static -s)
+target_compile_options(sokoban_solver PRIVATE -Wall -Wextra -pedantic -Werror -O3)
+target_link_options(sokoban_solver PRIVATE -static -s)
