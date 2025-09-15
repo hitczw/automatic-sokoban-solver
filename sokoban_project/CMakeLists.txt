@@ -5,8 +5,6 @@ if(NOT DEFINED TARGET_OS)
     set(TARGET_OS "native")
 endif()
 
-#set(CMAKE_CXX_FLAGS_RELEASE "-s")
-
 # 根据目标平台设置交叉编译工具链
 if(TARGET_OS STREQUAL "windows")
     # Windows 交叉编译设置
@@ -22,17 +20,13 @@ elseif(TARGET_OS STREQUAL "linux")
     SET(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)
 else()
     # 本机编译，使用系统默认编译器
-    message(STATUS "编译目标: 本机平台")
 endif()
 
 # 其余通用设置保持不变...
 SET(CMAKE_BUILD_TYPE "Release")
-SET(PRO_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include)
-INCLUDE_DIRECTORIES(${PRO_INCLUDE_PATH})
-SET(OUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
-SET(EXECUTABLE_OUTPUT_PATH ${OUT_PATH})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-FILE(GLOB_RECURSE MY_SRC src/*.cpp)
+FILE(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 SET(OUT_NAME sokoban_solver)
 
 ADD_EXECUTABLE(${OUT_NAME} ${MY_SRC})
