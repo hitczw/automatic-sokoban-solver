@@ -34,11 +34,13 @@
 
 如何运行？
 
-    进入build目录，sokoban_solver是可执行程序，box.txt存储关卡信息且
-    需要与sokoban_solver同一目录，在resource文件夹中有示例的box.txt
-    构建方法1和构建方法2已将示例box.txt拷贝到build目录中
-    ./sokoban_solver运行
-    示例box.txt选择求解方法0(A*算法)，内存容量32MB已通过测试
+    进入build目录，sokoban_solver是可执行程序，box.txt存储关卡信息且需要与sokoban_solver同一目录。
+    在resource文件夹中有示例的box.txt。
+    构建方法1和构建方法2已将示例box.txt拷贝到build目录中。
+    即运行如下两条命令即可执行：
+    cd build
+    ./sokoban_solver
+    示例box.txt选择求解方法0(A*算法)，内存容量32MB已通过测试。
 
 box.txt格式？
     
