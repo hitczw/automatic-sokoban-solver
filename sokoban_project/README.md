@@ -16,21 +16,19 @@
 演示视频 bilibili av76908171;
 作者hitczw
 
-如何构建以及运行?(在linux系统可运行如下命令)
-
+如何构建?
+构建方法1（运行命令）：
     mkdir build
     cd build
     cmake ..
     make
-    cp ../resource/box.txt ./
-    ./sokoban_solver
-
-你也可以直接运行脚本编译
-
+构建方法2（运行脚本）：
     ./run_build.sh #编译本机应用，linux系统上运行
     ./run_build.sh w #交叉编译windows应用，windows系统运行
     ./run_build.sh r #交叉编译arm应用，可以在树莓派5上运行
-如果是编译本机应用，可直接进入build目录执行sokoban_solver
+
+如何运行？
+    进入build目录，sokoban_solver是可执行程序，box.txt存储关卡信息，需要与sokoban_solver同一目录，在resource文件夹中有示例的box.txt存储关卡信息，需要与sokoban_solver同一目录，在resource文件夹中有示例的box
 
 规则?
     
